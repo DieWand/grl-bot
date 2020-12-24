@@ -109,11 +109,20 @@ async def complimentvc(context, name, lang='en'):
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
         break
+   
+    if random.random() < 0.02:
+        name = context.author.display_name                       
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text.')
     else:
-        await texttospeech(context, f'{name.replace("@", "")} you are so {random.choice(compliments)}', lang)
+        if 'hammie' == name.lower():   
+            await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insult)}', lang) 
+        else:
+            if random.random() < 0.1:
+                await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang) 
+            else:                       
+                await texttospeech(context, f'{name.replace("@", "")} you are so {random.choice(compliments)}', lang)
 
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
