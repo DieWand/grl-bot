@@ -90,7 +90,7 @@ async def insultvc(context, name, lang='en'):
         break
 
     if len(name) > 25:
-        context.send(f'Please enter a shorter text you {random.choice(insults)}.')
+        await context.send(f'Please enter a shorter text you {random.choice(insults)}.')
     else:
         await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang)
 
@@ -111,7 +111,7 @@ async def complimentvc(context, name, lang='en'):
         break
 
     if len(name) > 25:
-        context.send(f'Please enter a shorter text.')
+        await context.send(f'Please enter a shorter text.')
     else:
         await texttospeech(context, f'{name.replace("@", "")} you are so {random.choice(compliments)}', lang)
 
