@@ -118,8 +118,8 @@ async def complimentvc(context, name, lang='en'):
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
 async def texttospeech(context, text, lang='en'):
-    voice_channel = context.message.author.voice.channel
-    if voice_channel is not None:
+    author = context.message.author
+    if author.voice is not None:
         # text to speech and save as mp3
         filename = 'tts-' + str(time.time()) + '.mp3'
         audio = gTTS(text=text, lang=lang, slow=False)
