@@ -264,7 +264,7 @@ async def getanswer(searchterm):
 
     # seach on wikipedia
     try:
-        return wikipedia.summary(searchterm)
+        return wikipedia.summary(searchterm, sentences=1)
     except Exception:
         for new_query in wikipedia.search(searchterm):
             try:
