@@ -34,6 +34,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+'''
 f = open('/root/mysqlpw.txt', 'r')
 mysqlpw = f.read()
 mydb = mysql.connector.connect(
@@ -43,7 +44,7 @@ mydb = mysql.connector.connect(
   database="grl"
 )
 mycursor = mydb.cursor(buffered=True)
-
+'''
 
 # startup message in console
 @bot.event
@@ -67,7 +68,7 @@ async def on_member_join(member):
     response = random.choice(messages)
     await welcome.send(response)
  
-
+'''
 #Event adding
 @bot.event
 async def on_message(message):
@@ -120,7 +121,7 @@ async def on_message(message):
                     await message.channel.send(f'I added this vote: \"{vote}\" to the question: \"{question}\"')
             else:
                 await message.channel.send('Please add a question')       
-
+'''
                 
 # git gud command
 @bot.command(name='gg', help='Tell someone to git gud')
