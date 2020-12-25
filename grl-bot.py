@@ -105,11 +105,11 @@ async def insultvc(context, name, lang='en'):
 async def insult(ctx, name):
     if 'hammie' in name.lower():   
             ctx.send(f'{name} you are so {random.choice(insults)}') 
+    else:
+        if random.random() < 0.1:
+            await ctx.send(f'{name} you are so {random.choice(insults)}')
         else:
-            if random.random() < 0.1:
-                await ctx.send(f'{name} you are so {random.choice(insults)}')
-            else:
-                await ctx.send(f'{name} you are so {random.choice(compliments)}')
+            await ctx.send(f'{name} you are so {random.choice(compliments)}')
 
 
 # compliments a grl member in voice chat
