@@ -89,6 +89,33 @@ async def on_message(message):
                     await message.channel.send(f'I added this question to the list: \"{question}\"')
             else:
                 await message.channel.send('Please add a question')
+                
+        if '.vote' == splitstring[0]:
+            if len(splitstring) > 1:
+                del splitstring[0]
+
+                questiontablename = ''
+                for word in splitstring:
+                    questiontablename = questiontablename + word
+
+                splitquestion = questiontablename.split(',')
+                questiontablename = splitquestion[0]
+                vote = splitquestion[1]
+
+                question = ''
+                for word in splitstring:
+                    question = question + word + ' '
+                question[:-1]
+
+                if len(questiontablename) > 255:
+                    await message.channel.send('The question is too long')
+                else:
+                    mycursor.execute("USE votes")
+                    mycursor.execute(f'INSERT INTO {questiontablename} (name, answer) VALUES ({message.author.displayname},{vote})')
+                    print('Vote added')
+                    await message.channel.send(f'I added this vote: \"{vote}\" to the question: \"{question}\"')
+            else:
+                await message.channel.send('Please add a question')       
 
                 
 # git gud command
