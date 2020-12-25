@@ -70,7 +70,7 @@ async def on_member_join(member):
 async def on_message(message):
     if not message.guild and message.author is not bot.user:
         splitstring = message.content.split()
-        if '.vote' == splitstring[0]:
+        if '.addvote' == splitstring[0]:
             if len(splitstring) > 1:
                 del splitstring[0]
                 question = ''
@@ -79,9 +79,9 @@ async def on_message(message):
                 if len(word) >255:
                     await message.channel.send('Your question is too long')
                 else:
-                    mycursor.execute(f'INSERT INTO votes (question) VALUES (\'{question}\')')
-                    mydb.commit()
-                    print(mycursor.rowcount, "record inserted.")
+                    mycursor.execute("USE votes")
+                    mycursor.execute(f'CREATE TABLE {question} (name VARCHAR(255), answer VARCHAR(255))')
+                    print('Vote question added')
                     await message.channel.send(f'I added this question to the list: \"{question}\"')
             else:
                 await message.channel.send('Please add a question')
