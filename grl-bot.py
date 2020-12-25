@@ -59,7 +59,7 @@ async def on_member_join(member):
 async def test(ctx, name):
     await ctx.send(f'git gud {name}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
 # memes command
 @bot.command(name='memes', help='Get popular memes')
@@ -83,7 +83,7 @@ async def insult(ctx, name):
         name = ctx.author.display_name
     await ctx.send(f'{name} you {random.choice(insults)}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
 
 # insults a grl member in voice chat
@@ -115,7 +115,7 @@ async def insult(ctx, name):
         else:
             await ctx.send(f'{name} you are so {random.choice(compliments)}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
 # compliments a grl member in voice chat
 @bot.command(name='complimentvc', help='Compliments a grl member in voice chat. Optional: Language-Tag or "rnd" to '
@@ -141,7 +141,7 @@ async def complimentvc(context, name, lang='en'):
 # bot joins current voice channel, plays the text via text to speech and leaves again
 async def texttospeech(context, text, lang='en'):
     # check if given language is in the list
-    if lang not in languages:
+    if lang != 'rnd' and lang not in languages:
         await context.send(f'Please enter a valid language-tag. These are your options: {*languages,}')
         return
 
@@ -166,7 +166,7 @@ async def texttospeech(context, text, lang='en'):
         await currentvc.disconnect()
         os.remove(filename)
         # delete the original message
-        await context.message.delete()
+        await context.message.delete(delay=1)
     else:
         await context.send(f'Please connect to a voice channel first.')
 
