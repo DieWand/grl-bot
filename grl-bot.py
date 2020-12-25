@@ -73,14 +73,18 @@ async def on_message(message):
         if '.addvote' == splitstring[0]:
             if len(splitstring) > 1:
                 del splitstring[0]
+                questionTableName
+                for word in splitstring:
+                    questionTableName = questionTableName + word
                 question = ''
                 for word in splitstring:
                     question = question + word + ' '
-                if len(word) >255:
+                question[:-1]
+                if len(questionTableName) >255:
                     await message.channel.send('Your question is too long')
                 else:
                     mycursor.execute("USE votes")
-                    mycursor.execute(f'CREATE TABLE `{question}` (name VARCHAR(255), answer VARCHAR(255))')
+                    mycursor.execute(f'CREATE TABLE {questionTableName} (name VARCHAR(255), answer VARCHAR(255))')
                     print('Vote question added')
                     await message.channel.send(f'I added this question to the list: \"{question}\"')
             else:
