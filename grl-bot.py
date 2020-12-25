@@ -9,6 +9,7 @@ import discord
 import requests
 from discord.ext import commands
 from gtts import gTTS
+import mysql.connector
 
 # weird new Intents
 # not sure if they are all necessary
@@ -27,6 +28,16 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+
+f = open('/root/mysqlpw.txt', 'r')
+mysqlpw = f.read()
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="grl",
+  password=mysqlpw,
+  database="grl"
+)
+mycursor = mydb.cursor(buffered=True)
 
 
 # startup message in console
@@ -52,15 +63,70 @@ async def on_member_join(member):
                 f'{member.name} Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
     response = random.choice(messages)
     await welcome.send(response)
+ 
 
+#Event adding
+@bot.event
+async def on_message(message):
+    if not message.guild and message.author is not bot.user:
+        splitstring = message.content.split()
+        if '.addvote' == splitstring[0]:
+            if len(splitstring) > 1:
+                del splitstring[0]
+                questionTableName = ''
+                for word in splitstring:
+                    questionTableName = questionTableName + word
+                question = ''
+                for word in splitstring:
+                    question = question + word + ' '
+                question[:-1]
+                if len(questionTableName) >255:
+                    await message.channel.send('Your question is too long')
+                else:
+                    mycursor.execute("USE votes")
+                    mycursor.execute(f'CREATE TABLE {questionTableName} (name VARCHAR(255), answer VARCHAR(255))')
+                    print('Vote question added')
+                    await message.channel.send(f'I added this question to the list: \"{question}\"')
+            else:
+                await message.channel.send('Please add a question')
+                
+        if '.vote' == splitstring[0]:
+            if len(splitstring) > 1:
+                del splitstring[0]
 
+                questiontablename = ''
+                for word in splitstring:
+                    questiontablename = questiontablename + word
+
+                splitquestion = questiontablename.split(',')
+                questiontablename = splitquestion[0]
+                vote = splitquestion[1]
+
+                question = ''
+                for word in splitstring:
+                    question = question + word + ' '
+                question[:-1]
+
+                if len(questiontablename) > 255:
+                    await message.channel.send('The question is too long')
+                else:
+                    mycursor.execute("USE votes")
+                    mycursor.execute(f'INSERT INTO {questiontablename} (answer) VALUES (\"{vote})\"')
+                    mydb.commit()
+                    print('Vote added')
+                    await message.channel.send(f'I added this vote: \"{vote}\" to the question: \"{question}\"')
+            else:
+                await message.channel.send('Please add a question')       
+
+                
 # git gud command
 @bot.command(name='gg', help='Tell someone to git gud')
 async def test(ctx, name):
     await ctx.send(f'git gud {name}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
+    
 # memes command
 @bot.command(name='memes', help='Get popular memes')
 async def memes(ctx, number):
@@ -83,7 +149,7 @@ async def insult(ctx, name):
         name = ctx.author.display_name
     await ctx.send(f'{name} you {random.choice(insults)}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
 
 # insults a grl member in voice chat
@@ -115,8 +181,9 @@ async def insult(ctx, name):
         else:
             await ctx.send(f'{name} you are so {random.choice(compliments)}')
     # delete the original message
-    await ctx.message.delete()
+    await ctx.message.delete(delay=1)
 
+    
 # compliments a grl member in voice chat
 @bot.command(name='complimentvc', help='Compliments a grl member in voice chat. Optional: Language-Tag or "rnd" to '
                                        'randomize the language')
@@ -141,8 +208,8 @@ async def complimentvc(context, name, lang='en'):
 # bot joins current voice channel, plays the text via text to speech and leaves again
 async def texttospeech(context, text, lang='en'):
     # check if given language is in the list
-    if lang not in languages:
-        context.send(f'Please enter a valid language-tag. These are your options: {", ".join(languages)}')
+    if lang != 'rnd' and lang not in languages:
+        await context.send(f'Please enter a valid language-tag. These are your options: {*languages,}')
         return
 
     author = context.message.author
@@ -166,7 +233,7 @@ async def texttospeech(context, text, lang='en'):
         await currentvc.disconnect()
         os.remove(filename)
         # delete the original message
-        await context.message.delete()
+        await context.message.delete(delay=1)
     else:
         await context.send(f'Please connect to a voice channel first.')
 
