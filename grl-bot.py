@@ -142,7 +142,7 @@ async def complimentvc(context, name, lang='en'):
 async def texttospeech(context, text, lang='en'):
     # check if given language is in the list
     if lang not in languages:
-        context.send(f'Please enter a valid language-tag. These are your options: {", ".join(languages)}')
+        await context.send(f'Please enter a valid language-tag. These are your options: {*languages,}')
         return
 
     author = context.message.author
