@@ -46,9 +46,9 @@ async def on_member_join(member):
     messages = [f'{member.name} Welcome to hell', f'Welcome {member.name} please don\'t enjoy your stay',
                 f'{member.name} Welcome to the shitshow of gяl',
                 f'{member.name} Welcome gяl o/, get your burnt cookies in #shit-talk',
-                f'Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
-                f'Welcome to gяl where we make fun of everyone.',
-                f'Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
+                f'{member.name}Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
+                f'{member.name}Welcome to gяl where we make fun of everyone.',
+                f'{member.name}Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
     response = random.choice(messages)
     await welcome.send(response)
 
@@ -77,6 +77,8 @@ async def memes(ctx, number):
 # insults a grl member
 @bot.command(name='insult', help='Insult a grl member. Example: ".insult hammie".')
 async def insult(ctx, name):
+    if random.random() < 0.02:
+        name = context.author.display_name
     await ctx.send(f'{name} you {random.choice(insults)}')
     
 
@@ -88,17 +90,26 @@ async def insultvc(context, name, lang='en'):
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
         break
+    
+    if random.random() < 0.02:
+        name = context.author.display_name  
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text you {random.choice(insults)}.')
     else:
-        await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang)
+        await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang)
 
 
 # compliment a grl member
 @bot.command(name='compliment', help='Compliment a grl member. Example: ".compliment sau".')
 async def insult(ctx, name):
-    await ctx.send(f'{name} you are so {random.choice(compliments)}')
+    if 'hammie' in name.lower():   
+            await ctx.send(f'{name} you are so {random.choice(insults)}') 
+    else:
+        if random.random() < 0.1:
+            await ctx.send(f'{name} you are so {random.choice(insults)}')
+        else:
+            await ctx.send(f'{name} you are so {random.choice(compliments)}')
 
 
 # compliments a grl member in voice chat
@@ -108,21 +119,18 @@ async def complimentvc(context, name, lang='en'):
     # get name from mention if exists
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
-        break
-   
-    if random.random() < 0.02:
-        name = context.author.display_name                       
+        break                     
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text.')
     else:
-        if 'hammie' == name.lower():   
-            await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insult)}', lang) 
+        if 'hammie' in name.lower():   
+            await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
         else:
             if random.random() < 0.1:
-                await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang) 
+                await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
             else:                       
-                await texttospeech(context, f'{name.replace("@", "")} you are so {random.choice(compliments)}', lang)
+                await texttospeech(context, f'{name} you are so {random.choice(compliments)}', lang)
 
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
