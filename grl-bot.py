@@ -88,6 +88,9 @@ async def insultvc(context, name, lang='en'):
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
         break
+    
+    if random.random() < 0.02:
+        name = context.author.display_name  
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text you {random.choice(insults)}.')
@@ -108,15 +111,12 @@ async def complimentvc(context, name, lang='en'):
     # get name from mention if exists
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
-        break
-   
-    if random.random() < 0.02:
-        name = context.author.display_name                       
+        break                     
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text.')
     else:
-        if 'hammie' == name.lower():   
+        if 'hammie' in name.lower():   
             await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
         else:
             if random.random() < 0.1:
