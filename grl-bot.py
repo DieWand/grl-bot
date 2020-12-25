@@ -80,7 +80,7 @@ async def on_message(message):
                     await message.channel.send('Your question is too long')
                 else:
                     mycursor.execute("USE votes")
-                    mycursor.execute(f'CREATE TABLE \`{question}\` (name VARCHAR(255), answer VARCHAR(255))')
+                    mycursor.execute(f'CREATE TABLE `{question}` (name VARCHAR(255), answer VARCHAR(255))')
                     print('Vote question added')
                     await message.channel.send(f'I added this question to the list: \"{question}\"')
             else:
