@@ -73,7 +73,7 @@ async def on_message(message):
         if '.addvote' == splitstring[0]:
             if len(splitstring) > 1:
                 del splitstring[0]
-                questionTableName
+                questionTableName = ''
                 for word in splitstring:
                     questionTableName = questionTableName + word
                 question = ''
