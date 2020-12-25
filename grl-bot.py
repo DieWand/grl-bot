@@ -77,6 +77,8 @@ async def memes(ctx, number):
 # insults a grl member
 @bot.command(name='insult', help='Insult a grl member. Example: ".insult hammie".')
 async def insult(ctx, name):
+    if random.random() < 0.02:
+        name = context.author.display_name
     await ctx.send(f'{name} you {random.choice(insults)}')
     
 
@@ -101,7 +103,13 @@ async def insultvc(context, name, lang='en'):
 # compliment a grl member
 @bot.command(name='compliment', help='Compliment a grl member. Example: ".compliment sau".')
 async def insult(ctx, name):
-    await ctx.send(f'{name} you are so {random.choice(compliments)}')
+    if 'hammie' in name.lower():   
+            ctx.send(f'{name} you are so {random.choice(insults)}') 
+        else:
+            if random.random() < 0.1:
+                await ctx.send(f'{name} you are so {random.choice(insults)}')
+            else:
+                await ctx.send(f'{name} you are so {random.choice(compliments)}')
 
 
 # compliments a grl member in voice chat
