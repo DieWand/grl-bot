@@ -6,10 +6,11 @@ import time
 from time import sleep
 
 import discord
+import mysql.connector
 import requests
+import wikipedia
 from discord.ext import commands
 from gtts import gTTS
-import mysql.connector
 
 # weird new Intents
 # not sure if they are all necessary
@@ -22,6 +23,10 @@ bot = commands.Bot(command_prefix='.', intents=intents)
 insults = open('insults.txt').read().splitlines()
 compliments = open('compliments.txt').read().splitlines()
 languages = ['en', 'fr', 'de', 'pl', 'nl', 'fi', 'sv', 'it', 'es', 'pt', 'ru', 'es', 'ja', 'ko', 'no']
+
+# init meanings of grl
+grl = ['gay rice lickers', 'gays reeking of lust', 'gay retard lovers', 'garlic', 'grandma rodeo league',
+       'get rekt lol', 'ginger red ladies', 'great racing lads', 'greatest racers living']
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -52,8 +57,6 @@ async def on_member_join(member):
     print(f'{member.name} joined the server')
     guild = bot.guilds[0]
     welcome = guild.text_channels[0]
-    grl = ['gay rice lickers', 'gays reeking of lust', 'gay retard lovers', 'garlic', 'grandma rodeo league',
-           'get rekt lol', 'ginger red ladies', 'great racing lads', 'greatest racers living']
 
     messages = [f'{member.name} Welcome to hell', f'Welcome {member.name} please don\'t enjoy your stay',
                 f'{member.name} Welcome to the shitshow of gяl',
@@ -236,6 +239,38 @@ async def texttospeech(context, text, lang='en'):
         await context.message.delete(delay=1)
     else:
         await context.send(f'Please connect to a voice channel first.')
+
+
+# ask the bot a question
+@bot.command(name='whatis', help='Ask the bot a question.')
+async def whatis(context, searchterm):
+    await context.send(await getanswer(searchterm))
+
+
+# noinspection PyBroadException
+async def getanswer(searchterm):
+    if searchterm == "love":
+        return "https://www.youtube.com/watch?v=3rzgrP7VA_Q"
+    if searchterm == "grl" or searchterm in grl:
+        messages = [f'{random.choice(grl)} is love.',
+                    f'{random.choice(grl)} is life.',
+                    f'{random.choice(grl)} is the best Trackmania Team that has ever existed.'
+                    f'{random.choice(grl)} is a group of beautiful human beeings.',
+                    f'{random.choice(grl)} is way better than KSL (Kacke Scheisse League).',
+                    f'{random.choice(grl)} is amazing.',
+                    f'{random.choice(grl)} is a huge group of very nice dickheads.']
+        return random.choice(messages)
+
+    # seach on wikipedia
+    try:
+        return wikipedia.summary(searchterm)
+    except Exception:
+        for new_query in wikipedia.search(searchterm):
+            try:
+                return wikipedia.summary(new_query)
+            except Exception:
+                pass
+    return "I don't know about " + searchterm
 
 
 f = open('/root/token.txt', 'r')
