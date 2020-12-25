@@ -12,7 +12,7 @@ from gtts import gTTS
 
 # weird new Intents
 # not sure if they are all necessary
-#probably should only add the ones that we need
+# probably should only add the ones that we need
 intents = discord.Intents().all()
 
 bot = commands.Bot(command_prefix='.', intents=intents)
@@ -20,6 +20,7 @@ bot = commands.Bot(command_prefix='.', intents=intents)
 # init insults and compliments only once
 insults = open('insults.txt').read().splitlines()
 compliments = open('compliments.txt').read().splitlines()
+languages = ['en', 'fr', 'de', 'pl', 'nl', 'fi', 'sv', 'it', 'es', 'pt', 'ru', 'es', 'ja', 'ko', 'no']
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -46,9 +47,9 @@ async def on_member_join(member):
     messages = [f'{member.name} Welcome to hell', f'Welcome {member.name} please don\'t enjoy your stay',
                 f'{member.name} Welcome to the shitshow of gяl',
                 f'{member.name} Welcome gяl o/, get your burnt cookies in #shit-talk',
-                f'{member.name}Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
-                f'{member.name}Welcome to gяl where we make fun of everyone.',
-                f'{member.name}Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
+                f'{member.name} Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
+                f'{member.name} Welcome to gяl where we make fun of everyone.',
+                f'{member.name} Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
     response = random.choice(messages)
     await welcome.send(response)
 
@@ -57,7 +58,8 @@ async def on_member_join(member):
 @bot.command(name='gg', help='Tell someone to git gud')
 async def test(ctx, name):
     await ctx.send(f'git gud {name}')
-
+    # delete the original message
+    await ctx.message.delete()
 
 # memes command
 @bot.command(name='memes', help='Get popular memes')
@@ -75,24 +77,26 @@ async def memes(ctx, number):
 
 
 # insults a grl member
-@bot.command(name='insult', help='Insult a grl member. Example: ".insult hammie".')
+@bot.command(name='insult', help='Insult a grl member.')
 async def insult(ctx, name):
     if random.random() < 0.02:
-        name = context.author.display_name
+        name = ctx.author.display_name
     await ctx.send(f'{name} you {random.choice(insults)}')
-    
+    # delete the original message
+    await ctx.message.delete()
+
 
 # insults a grl member in voice chat
-@bot.command(name='insultvc', help='Insult a grl member in voice chat. Example: ".insultvc nani" or ".insultvc nani" it'
-                                   ' to insult nani in italian.')
+@bot.command(name='insultvc', help='Insult a grl member in voice chat. Optional: Language-Tag or "rnd" to randomize '
+                                   'the language')
 async def insultvc(context, name, lang='en'):
     # get name from mention if exists
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
         break
-    
+
     if random.random() < 0.02:
-        name = context.author.display_name  
+        name = context.author.display_name
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text you {random.choice(insults)}.')
@@ -101,42 +105,52 @@ async def insultvc(context, name, lang='en'):
 
 
 # compliment a grl member
-@bot.command(name='compliment', help='Compliment a grl member. Example: ".compliment sau".')
+@bot.command(name='compliment', help='Compliment a grl member.')
 async def insult(ctx, name):
-    if 'hammie' in name.lower():   
-            await ctx.send(f'{name} you are so {random.choice(insults)}') 
+    if 'hammie' in name.lower():
+        await ctx.send(f'{name} you are so {random.choice(insults)}')
     else:
         if random.random() < 0.1:
             await ctx.send(f'{name} you are so {random.choice(insults)}')
         else:
             await ctx.send(f'{name} you are so {random.choice(compliments)}')
-
+    # delete the original message
+    await ctx.message.delete()
 
 # compliments a grl member in voice chat
-@bot.command(name='complimentvc', help='Compliments a grl member in voice chat. Example: ".complimentvc sau" or '
-                                       '"complimentvc sau it" to compliment sau in italian.')
+@bot.command(name='complimentvc', help='Compliments a grl member in voice chat. Optional: Language-Tag or "rnd" to '
+                                       'randomize the language')
 async def complimentvc(context, name, lang='en'):
     # get name from mention if exists
     for mentionedmember in context.message.mentions:
         name = mentionedmember.display_name
-        break                     
+        break
 
     if len(name) > 25:
         await context.send(f'Please enter a shorter text.')
     else:
-        if 'hammie' in name.lower():   
-            await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
+        if 'hammie' in name.lower():
+            await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang)
         else:
             if random.random() < 0.1:
-                await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
-            else:                       
+                await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang)
+            else:
                 await texttospeech(context, f'{name} you are so {random.choice(compliments)}', lang)
 
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
 async def texttospeech(context, text, lang='en'):
+    # check if given language is in the list
+    if lang not in languages:
+        context.send(f'Please enter a valid language-tag. These are your options: {", ".join(languages)}')
+        return
+
     author = context.message.author
     if author.voice is not None:
+        # when language is "rnd", randomize a language
+        if lang == 'rnd':
+            lang = random.choice(languages)
+
         # text to speech and save as mp3
         filename = 'tts-' + str(time.time()) + '.mp3'
         audio = gTTS(text=text, lang=lang, slow=False)
@@ -151,6 +165,8 @@ async def texttospeech(context, text, lang='en'):
         # disconnect after the player has finished
         await currentvc.disconnect()
         os.remove(filename)
+        # delete the original message
+        await context.message.delete()
     else:
         await context.send(f'Please connect to a voice channel first.')
 
