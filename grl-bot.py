@@ -104,7 +104,7 @@ async def insultvc(context, name, lang='en'):
 @bot.command(name='compliment', help='Compliment a grl member. Example: ".compliment sau".')
 async def insult(ctx, name):
     if 'hammie' in name.lower():   
-            ctx.send(f'{name} you are so {random.choice(insults)}') 
+            await ctx.send(f'{name} you are so {random.choice(insults)}') 
     else:
         if random.random() < 0.1:
             await ctx.send(f'{name} you are so {random.choice(insults)}')
