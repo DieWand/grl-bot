@@ -141,7 +141,7 @@ async def complimentvc(context, name, lang='en'):
 # bot joins current voice channel, plays the text via text to speech and leaves again
 async def texttospeech(context, text, lang='en'):
     # check if given language is in the list
-    if lang not in languages:
+    if lang != 'rnd' and lang not in languages:
         await context.send(f'Please enter a valid language-tag. These are your options: {*languages,}')
         return
 
