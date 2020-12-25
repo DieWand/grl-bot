@@ -79,8 +79,7 @@ async def on_message(message):
                 if len(word) >255:
                     await message.channel.send('Your question is too long')
                 else:
-                    insertquestion = "INSERT INTO votes (question) VALUES (%s)"
-                    mycursor.execute(insertquestion, question)
+                    mycursor.execute(f'INSERT INTO votes (question) VALUES ({question})')
                     mydb.commit()
                     print(mycursor.rowcount, "record inserted.")
                     await message.channel.send(f'I added this question to the list: \"{question}\"')
