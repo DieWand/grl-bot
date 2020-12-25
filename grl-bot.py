@@ -46,9 +46,9 @@ async def on_member_join(member):
     messages = [f'{member.name} Welcome to hell', f'Welcome {member.name} please don\'t enjoy your stay',
                 f'{member.name} Welcome to the shitshow of gяl',
                 f'{member.name} Welcome gяl o/, get your burnt cookies in #shit-talk',
-                f'Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
-                f'Welcome to gяl where we make fun of everyone.',
-                f'Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
+                f'{member.name}Welcome to Gay Rice lickers, or was it racers? Hmm... Well you\'ll fucking love it here.',
+                f'{member.name}Welcome to gяl where we make fun of everyone.',
+                f'{member.name}Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
     response = random.choice(messages)
     await welcome.send(response)
 
@@ -92,7 +92,7 @@ async def insultvc(context, name, lang='en'):
     if len(name) > 25:
         await context.send(f'Please enter a shorter text you {random.choice(insults)}.')
     else:
-        await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang)
+        await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang)
 
 
 # compliment a grl member
@@ -117,12 +117,12 @@ async def complimentvc(context, name, lang='en'):
         await context.send(f'Please enter a shorter text.')
     else:
         if 'hammie' == name.lower():   
-            await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insult)}', lang) 
+            await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
         else:
             if random.random() < 0.1:
-                await texttospeech(context, f'{name.replace("@", "")} you are a {random.choice(insults)}', lang) 
+                await texttospeech(context, f'{name} you are a {random.choice(insults)}', lang) 
             else:                       
-                await texttospeech(context, f'{name.replace("@", "")} you are so {random.choice(compliments)}', lang)
+                await texttospeech(context, f'{name} you are so {random.choice(compliments)}', lang)
 
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
