@@ -9,6 +9,7 @@ import discord
 import requests
 from discord.ext import commands
 from gtts import gTTS
+import mysql.connector
 
 # weird new Intents
 # not sure if they are all necessary
@@ -27,6 +28,16 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+
+f = open('/root/mysqlpw.txt', 'r')
+mysqlpw = f.read()
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="grl",
+  password=mysqlpw,
+  database="grl"
+)
+mycursor = mydb.cursor()
 
 
 # startup message in console
@@ -52,8 +63,31 @@ async def on_member_join(member):
                 f'{member.name} Welcome to ' + random.choice(grl) + ' you\'ll fucking love it here.']
     response = random.choice(messages)
     await welcome.send(response)
+ 
 
+#Event adding
+@bot.event
+async def on_message(message):
+    if not message.guild and message.author is not bot.user:
+        splitstring = message.content.split()
+        if '.vote' == splitstring[0]:
+            if len(splitstring) > 1:
+                del splitstring[0]
+                question = ''
+                for word in splitstring:
+                    question = question + word + ' '
+                if len(word) >255:
+                    await message.channel.send('Your question is too long')
+                else:
+                    insertquestion = "INSERT INTO votes (question) VALUES (%s)"
+                    mycursor.execute(insertquestion, question)
+                    mydb.commit()
+                    print(mycursor.rowcount, "record inserted.")
+                    await message.channel.send(f'I added this question to the list: \"{question}\"')
+            else:
+                await message.channel.send('Please add a question')
 
+                
 # git gud command
 @bot.command(name='gg', help='Tell someone to git gud')
 async def test(ctx, name):
@@ -61,6 +95,7 @@ async def test(ctx, name):
     # delete the original message
     await ctx.message.delete(delay=1)
 
+    
 # memes command
 @bot.command(name='memes', help='Get popular memes')
 async def memes(ctx, number):
@@ -117,6 +152,7 @@ async def insult(ctx, name):
     # delete the original message
     await ctx.message.delete(delay=1)
 
+    
 # compliments a grl member in voice chat
 @bot.command(name='complimentvc', help='Compliments a grl member in voice chat. Optional: Language-Tag or "rnd" to '
                                        'randomize the language')
