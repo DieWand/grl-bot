@@ -112,6 +112,7 @@ async def on_message(message):
                 else:
                     mycursor.execute("USE votes")
                     mycursor.execute(f'INSERT INTO {questiontablename} (name, answer) VALUES ({message.author.name},{vote})')
+                    mydb.commit()
                     print('Vote added')
                     await message.channel.send(f'I added this vote: \"{vote}\" to the question: \"{question}\"')
             else:
