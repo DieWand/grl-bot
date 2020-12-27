@@ -208,7 +208,7 @@ async def complimentvc(context, name, lang='en'):
             else:
                 await texttospeech(context, f'{name} you are so {random.choice(compliments)}', lang)
                      
-@bot.command(name'tts', help='Let the bot talk for you')
+@bot.command(name='tts', help='Let the bot talk for you')
 async def tts(context, text, lang='en'):
        await texttospeech(context, name, lang)
 
