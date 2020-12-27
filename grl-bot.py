@@ -210,7 +210,7 @@ async def complimentvc(context, name, lang='en'):
                      
 @bot.command(name='tts', help='Let the bot talk for you')
 async def tts(context, text, lang='en'):
-       await texttospeech(context, name, lang)
+       await texttospeech(context, text, lang)
 
 
 # bot joins current voice channel, plays the text via text to speech and leaves again
