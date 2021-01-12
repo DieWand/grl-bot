@@ -283,7 +283,7 @@ async def NANINANINANI(context):
     await playaudio(context, 1)
         
 # bot joins current voice channel, plays the audio file and leaves again
-async def playaudio(context, audioID): //edited code from TTS if it breakes its on diewand
+async def playaudio(context, audioID): 
     author = context.message.author
     if audioID = 1: 
         filename = 'NANINANINANI.mp3'
