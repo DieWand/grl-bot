@@ -297,7 +297,6 @@ async def playaudio(context, audioID):
             await asyncio.sleep(1)
         # disconnect after the player has finished
         await currentvc.disconnect()
-        os.remove(filename)
         # delete the original message
         await context.message.delete(delay=1)
     else:
