@@ -277,6 +277,34 @@ async def getanswer(searchterm):
                 pass
     return "I don't know about " + searchterm
 
+# NANINANINANI
+@bot.command(name='NANI', help='Step 1: Join voice, Step 2: enjoy Nani, step 3: ??')
+async def NANINANINANI(context): 
+    await playaudio(context, 1)
+        
+# bot joins current voice channel, plays the audio file and leaves again
+async def playaudio(context, audioID): //edited code from TTS if it breakes its on diewand
+    author = context.message.author
+    if audioID = 1: 
+        filename = 'NANINANINANI.mp3'
+    else if audioID = 2:
+        filename = 'having options for later :)' 
+        
+    if author.voice is not None:
+        # connect to vc und play audio           
+        vc = author.voice.channel
+        currentvc = await vc.connect()
+        currentvc.play(discord.FFmpegPCMAudio(filename))
+        while currentvc.is_playing():
+            await asyncio.sleep(1)
+        # disconnect after the player has finished
+        await currentvc.disconnect()
+        os.remove(filename)
+        # delete the original message
+        await context.message.delete(delay=1)
+    else:
+        await context.send(f'Please connect to a voice channel first.')
+
 
 f = open('/root/token.txt', 'r')
 token = f.read()
