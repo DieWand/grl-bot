@@ -285,8 +285,8 @@ async def NANINANINANI(context):
 # bot joins current voice channel, plays the audio file and leaves again
 async def playaudio(context, audioID): 
     author = context.message.author
-    if audioID = 1: 
-        filename = 'NANINANINANI.mp3'
+    if audioID == 1: 
+        filename == 'NANINANINANI.mp3'
     else if audioID = 2:
         filename = 'having options for later :)' 
         
