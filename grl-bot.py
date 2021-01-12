@@ -287,9 +287,6 @@ async def playaudio(context, audioID):
     author = context.message.author
     if audioID == 1: 
         filename == 'NANINANINANI.mp3'
-    else: 
-       if audioID = 2:
-              filename = 'having options for later :)' 
         
     if author.voice is not None:
         # connect to vc und play audio           
