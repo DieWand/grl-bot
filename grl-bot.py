@@ -278,7 +278,7 @@ async def getanswer(searchterm):
     return "I don't know about " + searchterm
 
 # NANINANINANI
-@bot.command(name='NANI', help='Step 1: Join voice, Step 2: enjoy Nani, step 3: ??')
+@bot.command(name='nani', help='Step 1: Join voice, Step 2: enjoy Nani, step 3: ??')
 async def NANINANINANI(context): 
     await playaudio(context, 1)
         
@@ -286,7 +286,7 @@ async def NANINANINANI(context):
 async def playaudio(context, audioID): 
     author = context.message.author
     if audioID == 1: 
-        filename = '/root/NANINANINANI.mp3'
+        filename = '/root/naninaninani.mp3'
         
     if author.voice is not None:
         # connect to vc und play audio           
